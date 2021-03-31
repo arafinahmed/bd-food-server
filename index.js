@@ -32,9 +32,15 @@ client.connect(err => {
     .then(result => {
         console.log(result.insertedCount);
         res.send(result.insertedCount > 0);
-    })
-    
+    })    
 })
+app.get('/allProducts', (req, res) => {
+  productsCollection.find({})
+  .toArray((err, document) => {
+    
+    res.send(document);
+  })
+});
 
 });
 
