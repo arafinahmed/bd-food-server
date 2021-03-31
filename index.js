@@ -25,7 +25,16 @@ client.connect(err => {
   const productsCollection = client.db(process.env.DB_NAME).collection(process.env.DB_COLLECTION);
   const ordersCollection = client.db(process.env.DB_NAME).collection(process.env.DB_COLLECTION2);
   console.log("Connected");
-
+  app.post('/addProduct', (req, res) => {
+    const newProduct = req.body;
+    console.log(newProduct);
+    productsCollection.insertOne(newProduct)
+    .then(result => {
+        console.log(result.insertedCount);
+        res.send(result.insertedCount > 0);
+    })
+    
+})
 
 });
 
