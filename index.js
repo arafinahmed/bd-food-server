@@ -27,19 +27,29 @@ client.connect(err => {
   const ordersCollection = client.db(process.env.DB_NAME).collection(process.env.DB_COLLECTION2);
   console.log("Connected");
   app.post('/addProduct', (req, res) => {
-    const newProduct = req.body;
-    console.log(newProduct);
-    productsCollection.insertOne(newProduct)
-      .then(result => {
-        console.log(result.insertedCount);
-        res.send(result.insertedCount > 0);
-      })
+    try {
+      const newProduct = req.body;
+      console.log(newProduct);
+      productsCollection.insertOne(newProduct)
+        .then(result => {
+          console.log(result.insertedCount);
+          res.send(result.insertedCount > 0);
+        })
+    }
+    catch{
+      res.send(false);
+    }
   })
   app.get('/allProducts', (req, res) => {
-    productsCollection.find({})
-      .toArray((err, document) => {
-        res.send(document);
-      })
+    try {
+      productsCollection.find({})
+        .toArray((err, document) => {
+          res.send(document);
+        })
+    }
+    catch {
+      res.send([]);
+    }
   });
   app.get('/product/:id', (req, res) => {
     try {
@@ -55,13 +65,18 @@ client.connect(err => {
     }
   });
   app.post('/newOrder', (req, res) => {
-    const newOrder = req.body;
-    console.log(newOrder);
-    ordersCollection.insertOne(newOrder)
-      .then(result => {
-        console.log(result.insertedCount);
-        res.send(result.insertedCount > 0);
-      })
+    try {
+      const newOrder = req.body;
+      console.log(newOrder);
+      ordersCollection.insertOne(newOrder)
+        .then(result => {
+          console.log(result.insertedCount);
+          res.send(result.insertedCount > 0);
+        })
+    }
+    catch {
+      res.send(false);
+    }
   })
 
   app.get('/allOrders', (req, res) => {
@@ -73,10 +88,24 @@ client.connect(err => {
           res.send(docs);
         })
     }
-    catch{
+    catch {
       res.send([]);
-    }    
+    }
   });
+
+  app.delete('/deleteProduct/:id', (req, res) => {
+    try {
+      const id = ObjectID(req.params.id);
+      console.log(id);
+      productsCollection.findOneAndDelete({ _id: id })
+        .then(document => {
+          res.send({ "message:": "delete" });
+        })
+    }
+    catch {
+      res.send(false);
+    }
+  })
 
 });
 
