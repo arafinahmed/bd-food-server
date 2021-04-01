@@ -8,6 +8,7 @@ app.use(bodyParser.json())
 app.use(cors());
 
 const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID;
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2jkon.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -29,18 +30,53 @@ client.connect(err => {
     const newProduct = req.body;
     console.log(newProduct);
     productsCollection.insertOne(newProduct)
-    .then(result => {
+      .then(result => {
         console.log(result.insertedCount);
         res.send(result.insertedCount > 0);
-    })    
-})
-app.get('/allProducts', (req, res) => {
-  productsCollection.find({})
-  .toArray((err, document) => {
-    
-    res.send(document);
+      })
   })
-});
+  app.get('/allProducts', (req, res) => {
+    productsCollection.find({})
+      .toArray((err, document) => {
+        res.send(document);
+      })
+  });
+  app.get('/product/:id', (req, res) => {
+    try {
+      const id = ObjectID(req.params.id);
+      console.log(id);
+      productsCollection.find({ _id: id })
+        .toArray((err, document) => {
+          res.send(document[0]);
+        })
+    }
+    catch {
+      res.send({})
+    }
+  });
+  app.post('/newOrder', (req, res) => {
+    const newOrder = req.body;
+    console.log(newOrder);
+    ordersCollection.insertOne(newOrder)
+      .then(result => {
+        console.log(result.insertedCount);
+        res.send(result.insertedCount > 0);
+      })
+  })
+
+  app.get('/allOrders', (req, res) => {
+    try {
+      const email = req.query.email;
+      console.log(email);
+      ordersCollection.find({ email: email })
+        .toArray((err, docs) => {
+          res.send(docs);
+        })
+    }
+    catch{
+      res.send([]);
+    }    
+  });
 
 });
 
