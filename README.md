@@ -12,13 +12,13 @@
 
 ## List of endpoints: 
 
-### "/" ==> Testing the server is working or not "Hello World"
-### "/addProduct" ==> For adding new Product in mongodb
-### "/allProducts" ==> get all products from database
-### "/product/:id" ==> find the exact product by id
-### "/newOrder" ==> save new order in database
-### "/allOrders" ==> filter orders by email 
-### "/deleteProduct/:id" ==> delete product from database using product it
+### `/` ==> Testing the server is working or not "Hello World"
+### `/addProduct` ==> For adding new Product in mongodb
+### `/allProducts` ==> get all products from database
+### `/product/:id` ==> find the exact product by id
+### `/newOrder` ==> save new order in database
+### `/allOrders` ==> filter orders by email 
+### `/deleteProduct/:id` ==> delete product from database using product it
 
 ## The server is deployed to HEROKU 
-## Live link : 
+## Live link : `https://sheltered-taiga-37927.herokuapp.com/`
